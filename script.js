@@ -1,56 +1,69 @@
-function getComputerChoice() {
-    const choices = ['rock', 'paper', 'scissors'];
-    let randomNumber = Math.floor(Math.random() * 3);
-    return choices[randomNumber];
-} 
+// function getComputerChoice() {
+//     const choices = ['rock', 'paper', 'scissors'];
+//     let randomNumber = Math.floor(Math.random() * 3);
+//     return choices[randomNumber];
+//}
 
-const computerSelection = getComputerChoice();
-let result = '';
-let counterUser = 0;
+const playerText = document.querySelector("#playerText")
+const computerText = document.querySelector("#computerText")
+const resultText = document.querySelector("#resultText")
+const counterText = document.querySelector("#counterText")
+const playerChoices = document.querySelectorAll('.btn')
+let player;
+let computer;
+let result;
 let counterComputer = 0;
-let score = ` Score : You ${counterUser} - Computer ${counterComputer}`
+let counterPlayer = 0;
 
-function playRound(playerSelection =  prompt('Your choice ?').toLowerCase(), computerSelection) {
-    computerSelection = getComputerChoice();
-    let score = ` Score : You ${counterUser} - Computer ${counterComputer}`
-    if (playerSelection === computerSelection) {
-        result = "It's a tie!";
-        alert(result + score);
-    } else if (playerSelection === 'scissors' && computerSelection === 'paper')
-    {
-        result = "You've won!";
-        counterUser = ++counterUser;
-        alert(result + score);
-    } else if (playerSelection === 'paper' && computerSelection === 'rock')
-    {
-        result = "You've won!";
-        counterUser = ++counterUser;
-        alert(result + score);
-    } else if (playerSelection === 'rock' && computerSelection === 'scissors')
-    {
-        result = "You've won!";
-        counterUser = ++counterUser;
-        alert(result + score);
-    } else {
-        result = "You've lost!";
-        counterComputer = ++counterComputer;
-        alert(result + score);
+playerChoices.forEach(button => button.addEventListener('click', () => {
+    player = button.textContent;
+    computerTurn();
+    playerText.textContent = `Player: ${player}`;
+    computerText.textContent = `Computer: ${computer}`;
+    resultText.textContent = checkWinner();
+    counterUpdate();
+    counterText.textContent = `Player: ${counterPlayer} Computer: ${counterComputer}`
+    gameOver();
+
+}));
+
+function computerTurn() {
+    const randNum = Math.floor(Math.random() * 3);
+    const computerChoices = ['Rock', 'Paper', 'Scissors']
+
+    return computer = computerChoices[randNum]
+}
+
+function checkWinner() {
+    if (player === computer) {
+        return "It's a draw!"
     }
-  }
-
-
-
-  function game() {
-    for (let i = 0; i < 5; i++) {
-
-        playRound();
+    else if (player === 'Rock') {
+        return (computer === 'Scissors') ? "You win!" : "You lose!"
     }
-    if (counterUser > counterComputer) {
-        alert("You won the game")
-    } else {
-        alert("You lost the game")
+    else if (player === 'Paper') {
+        return (computer === 'Rock') ? "You win!" : "You lose!"
+    }
+    else if (player === 'Scissors') {
+        return (computer === 'Paper') ? "You win!" : "You lose!"
     }
 }
 
+function counterUpdate () {
+    if (checkWinner() === 'You win!') {
+        counterPlayer++;
+    }
+    else if (checkWinner() === 'You lose!') {
+        counterComputer++;
+    }
+    return
+}
 
-  console.log(game());
+function gameOver () {
+    if (counterPlayer === 5) {
+        return counterText.textContent = 'You won the game';
+    } else if (counterComputer === 5) {
+        return counterText.textContent = 'You lost the game'
+    }
+    return;
+}
